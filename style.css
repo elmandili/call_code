@@ -1,23 +1,130 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  font-family: 'Syne Mono', monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f9;
+  color: #333;
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 24px;
   color: #2c3e50;
-  margin: 80px 10px;
+}
+
+h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #34495e;
+}
+
+p {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+/* Video Container */
+.videos {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.videos span {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  text-align: center;
 }
 
 video {
-  width: 40vw;
-  height: 30vw;
-  margin: 2rem;
-  background: #2c3e50;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  background-color: #000;
 }
 
-.videos {
+/* Button Container */
+.button-container {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
   align-items: center;
-  justify-content: center;
+}
+
+/* Buttons */
+button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  flex: 1;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Input Field */
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  flex: 1;
+}
+
+/* Hangup Button */
+#hangupButton {
+  background-color: #e74c3c;
+}
+
+#hangupButton:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .videos {
+    flex-direction: column;
+  }
+
+  video {
+    max-width: 100%;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  button, input {
+    width: 100%;
+  }
 }

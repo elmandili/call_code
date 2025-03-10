@@ -1,5 +1,4 @@
 import './style.css';
-
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -31,6 +30,7 @@ const servers = {
 const pc = new RTCPeerConnection(servers);
 let localStream = null;
 let remoteStream = null;
+let callDoc = null; // Store the Firestore document reference
 
 // HTML elements
 const webcamButton = document.getElementById('webcamButton');
@@ -42,7 +42,6 @@ const remoteVideo = document.getElementById('remoteVideo');
 const hangupButton = document.getElementById('hangupButton');
 
 // 1. Setup media sources
-
 webcamButton.onclick = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
@@ -60,7 +59,7 @@ webcamButton.onclick = async () => {
   };
 
   webcamVideo.srcObject = localStream;
-  webcamVideo.muted = true; 
+  webcamVideo.muted = true;
   remoteVideo.srcObject = remoteStream;
 
   callButton.disabled = false;
@@ -71,7 +70,7 @@ webcamButton.onclick = async () => {
 // 2. Create an offer
 callButton.onclick = async () => {
   // Reference Firestore collections for signaling
-  const callDoc = firestore.collection('calls').doc();
+  callDoc = firestore.collection('calls').doc();
   const offerCandidates = callDoc.collection('offerCandidates');
   const answerCandidates = callDoc.collection('answerCandidates');
 
@@ -118,7 +117,7 @@ callButton.onclick = async () => {
 // 3. Answer the call with the unique ID
 answerButton.onclick = async () => {
   const callId = callInput.value;
-  const callDoc = firestore.collection('calls').doc(callId);
+  callDoc = firestore.collection('calls').doc(callId);
   const answerCandidates = callDoc.collection('answerCandidates');
   const offerCandidates = callDoc.collection('offerCandidates');
 
@@ -143,11 +142,46 @@ answerButton.onclick = async () => {
 
   offerCandidates.onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
-      console.log(change);
       if (change.type === 'added') {
-        let data = change.doc.data();
-        pc.addIceCandidate(new RTCIceCandidate(data));
+        const candidate = new RTCIceCandidate(change.doc.data());
+        pc.addIceCandidate(candidate);
       }
     });
   });
+
+  hangupButton.disabled = false;
+};
+
+// 4. Hangup the call
+hangupButton.onclick = () => {
+  // Close the peer connection
+  pc.close();
+
+  // Stop all tracks in the local stream
+  if (localStream) {
+    localStream.getTracks().forEach((track) => track.stop());
+  }
+
+  // Stop all tracks in the remote stream
+  if (remoteStream) {
+    remoteStream.getTracks().forEach((track) => track.stop());
+  }
+
+  // Reset video elements
+  webcamVideo.srcObject = null;
+  remoteVideo.srcObject = null;
+
+  // Reset UI
+  webcamButton.disabled = false;
+  callButton.disabled = true;
+  answerButton.disabled = true;
+  hangupButton.disabled = true;
+  callInput.value = '';
+
+  // Clear Firestore data (optional)
+  if (callDoc) {
+    callDoc.delete();
+  }
+
+  console.log('Call ended.');
 };

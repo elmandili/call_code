@@ -4,38 +4,47 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>WebRTC Demo</title>
   </head>
   <body>
-    <h2>1. Start your Webcam</h2>
     <div class="videos">
       <span>
         <h3>Local Stream</h3>
-        <video id="webcamVideo" autoplay playsinline ></video>
+        <video id="webcamVideo" autoplay playsinline></video>
       </span>
       <span>
         <h3>Remote Stream</h3>
         <video id="remoteVideo" autoplay playsinline></video>
       </span>
-
-
     </div>
 
-    <button id="webcamButton">Start webcam</button>
-    <h2>2. Create a new Call</h2>
-    <button id="callButton" disabled>Create Call (offer)</button>
+    <div class="button-container">
+      <div class="button-row">
+        <button id="webcamButton">Start webcam</button>
+        <button id="callButton" disabled>Create Call (offer)</button>
+      </div>
 
-    <h2>3. Join a Call</h2>
-    <p>Answer the call from a different browser window or device</p>
-    
-    <input id="callInput" />
-    <button id="answerButton" disabled>Answer</button>
+      
+      <div class="button-row">
+        
+      </div>
 
-    <h2>4. Hangup</h2>
+      
+      
+      <div class="button-row">
+        <input id="callInput" placeholder="Enter call ID" />
+        <button id="answerButton" disabled>Answer</button>
+        <button id="hangupButton">Hangup</button>
+      </div>
+      <p>Answer the call from a different browser window or device</p>
 
-    <button id="hangupButton">Hangup</button>
+      
+      <div class="button-row">
+        
+      </div>
+    </div>
 
     <script type="module" src="/main.js"></script>
-
   </body>
 </html>
