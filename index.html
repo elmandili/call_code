@@ -2,19 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>WebRTC Demo</title>
+    <title>call_code</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <header>
+      <img src="/assets/logo-transparent.png" alt="">
+      <h6>by aymane_code</h6>
+    </header>
+
     <div class="videos">
       <span>
-        <h3>Local Stream</h3>
         <video id="webcamVideo" autoplay playsinline></video>
       </span>
       <span>
-        <h3>Remote Stream</h3>
         <video id="remoteVideo" autoplay playsinline></video>
       </span>
     </div>
@@ -22,28 +24,22 @@
     <div class="button-container">
       <div class="button-row">
         <button id="webcamButton">Start webcam</button>
-        <button id="callButton" disabled>Create Call (offer)</button>
-      </div>
-
-      
-      <div class="button-row">
         <button id="shareScreenButton">Share Screen</button>
       </div>
 
-      
-      
       <div class="button-row">
         <input id="callInput" placeholder="Enter call ID" />
+        <button id="callButton" disabled>Create Call (offer)</button>
         <button id="answerButton" disabled>Answer</button>
         <button id="hangupButton">Hangup</button>
       </div>
       <p>Answer the call from a different browser window or device</p>
-
-      
-      <div class="button-row">
-        
-      </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2023 Call_Code. All rights reserved. | Designed by aymane_code</p>
+    </footer>
 
     <script type="module" src="/main.js"></script>
   </body>
