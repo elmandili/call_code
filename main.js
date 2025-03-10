@@ -185,3 +185,69 @@ hangupButton.onclick = () => {
 
   console.log('Call ended.');
 };
+
+
+
+// HTML elements
+const shareScreenButton = document.getElementById('shareScreenButton');
+
+// Screen sharing stream
+let screenStream = null;
+
+// Share screen
+shareScreenButton.onclick = async () => {
+  try {
+    // Capture the screen
+    screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+      audio: true, // Set to false if you don't want to share audio
+    });
+
+    // Replace the local video stream with the screen stream
+    webcamVideo.srcObject = screenStream;
+
+    // Replace the tracks in the peer connection
+    const senders = pc.getSenders();
+    senders.forEach((sender) => {
+      if (sender.track.kind === 'video') {
+        sender.replaceTrack(screenStream.getVideoTracks()[0]);
+      }
+    });
+
+    // Disable the "Share Screen" button after starting
+    shareScreenButton.disabled = true;
+
+    // Stop screen sharing when the user clicks "Stop Sharing" in the browser UI
+    screenStream.getVideoTracks()[0].onended = () => {
+      stopScreenSharing();
+    };
+  } catch (error) {
+    console.error('Error sharing screen:', error);
+  }
+};
+
+// Stop screen sharing
+function stopScreenSharing() {
+  if (screenStream) {
+    screenStream.getTracks().forEach((track) => track.stop());
+    screenStream = null;
+  }
+
+  // Re-enable the "Share Screen" button
+  shareScreenButton.disabled = false;
+
+  // Restore the local webcam stream
+  if (localStream) {
+    webcamVideo.srcObject = localStream;
+
+    // Replace the tracks in the peer connection with the webcam stream
+    const senders = pc.getSenders();
+    senders.forEach((sender) => {
+      if (sender.track.kind === 'video') {
+        sender.replaceTrack(localStream.getVideoTracks()[0]);
+      }
+    });
+  } else {
+    webcamVideo.srcObject = null;
+  }
+}
